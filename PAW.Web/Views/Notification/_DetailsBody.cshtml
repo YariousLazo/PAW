@@ -1,0 +1,14 @@
+@model PAW.Models.DTO.NotificationDTO
+
+<dl class="row mb-0">
+    <dt class="col-sm-4">Notification ID</dt>
+    <dd class="col-sm-8">@Model.Id</dd>
+    <dt class="col-sm-4">User ID</dt>
+    <dd class="col-sm-8">@Model.UserId</dd>
+    <dt class="col-sm-4">Message</dt>
+    <dd class="col-sm-8">@Model.Message</dd>
+    <dt class="col-sm-4">Read</dt>
+    <dd class="col-sm-8">@if (Model.IsRead == true) { <span class="badge bg-success">Yes</span> } else { <span class="badge bg-secondary">No</span> }</dd>
+    <dt class="col-sm-4">Created Date</dt>
+    <dd class="col-sm-8">@(Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm"))</dd>
+</dl>
