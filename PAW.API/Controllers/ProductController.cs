@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PAW.DataAccess.Repositories;
-using PAW.Models;
 using PAW.Models.DTO;
 
 namespace PAW.API.Controllers
@@ -20,6 +19,7 @@ namespace PAW.API.Controllers
         public async Task<ActionResult<ProductDTO>> GetById(int id)
         {
             var product = await productRepository.FindAsync(id);
+            if (product is null) return NotFound();
             return ProductDTO.ConvertFrom(product);
         }
 
@@ -32,28 +32,28 @@ namespace PAW.API.Controllers
         }*/
 
         [HttpPost]
-        public async Task<bool> Save([FromBody] IEnumerable<Product> Products)
+        public async Task<ActionResult<bool>> Save([FromBody] ProductDTO dto)
         {
-            foreach (var p in Products)
+            if (dto.ProductId > 0)
             {
-                if (p.ProductId > 0)
-                    await productRepository.CreateAsync(p);
-                else await productRepository.UpdateAsync(p);
+                var existing = await productRepository.FindAsync(dto.ProductId);
+                if (existing is null) return NotFound();
+                ProductDTO.CopyTo(dto, existing);
+                existing.LastModified = DateTime.Now;
+                return await productRepository.UpdateAsync(existing);
             }
 
-            /*Products.ToList().ForEach(async x =>
-            {
-                if (x.Id > 0)
-                    await productRepository.CreateAsync(x);
-                else await productRepository.UpdateAsync(x);
-            });*/
-            return true;
+            var entity = ProductDTO.ConvertTo(dto);
+            entity.LastModified = DateTime.Now;
+            return await productRepository.CreateAsync(entity);
         }
 
-        [HttpDelete]
-        public async Task<bool> Delete(Product Product)
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<bool>> Delete(int id)
         {
-            return await productRepository.DeleteAsync(Product);
+            var product = await productRepository.FindAsync(id);
+            if (product is null) return NotFound();
+            return await productRepository.DeleteAsync(product);
         }
     }
 }
