@@ -1,5 +1,10 @@
+using System.Globalization;
 using APW.Architecture;
 using PAW.Web.Services;
+
+// Decimal and date values are posted by the modal forms in invariant format (e.g. 12.50).
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
 var builder = WebApplication.CreateBuilder(args);
 
