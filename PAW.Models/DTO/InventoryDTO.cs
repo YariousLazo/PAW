@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace PAW.Models.DTO;
@@ -17,6 +18,7 @@ public class InventoryDTO
     [JsonPropertyName("lastUpdated")]
     public DateTime? LastUpdated { get; set; }
     [JsonPropertyName("modifiedBy")]
+    [StringLength(255)]
     public string? ModifiedBy { get; set; }
 
     public static InventoryDTO ConvertFrom(Inventory inventory)
@@ -45,5 +47,17 @@ public class InventoryDTO
             LastUpdated = dto.LastUpdated,
             ModifiedBy = dto.ModifiedBy
         };
+    }
+
+    /// <summary>
+    /// Copies only the editable values of the DTO onto an existing (tracked) entity.
+    /// Fields that are not editable (audit dates, PasswordHash, ...) are left untouched.
+    /// </summary>
+    public static void CopyTo(InventoryDTO dto, Inventory entity)
+    {
+        entity.ProductId = dto.ProductId;
+        entity.UnitPrice = dto.UnitPrice;
+        entity.UnitsInStock = dto.UnitsInStock;
+        entity.ModifiedBy = dto.ModifiedBy;
     }
 }

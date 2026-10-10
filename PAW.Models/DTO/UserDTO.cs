@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace PAW.Models.DTO;
@@ -7,8 +8,10 @@ public class UserDTO
     [JsonPropertyName("userId")]
     public int UserId { get; set; }
     [JsonPropertyName("username")]
+    [StringLength(255)]
     public string? Username { get; set; }
     [JsonPropertyName("email")]
+    [StringLength(255)]
     public string? Email { get; set; }
     [JsonPropertyName("isActive")]
     public bool? IsActive { get; set; }
@@ -17,8 +20,10 @@ public class UserDTO
     [JsonPropertyName("createdAt")]
     public DateTime? CreatedAt { get; set; }
     [JsonPropertyName("modifiedBy")]
+    [StringLength(255)]
     public string? ModifiedBy { get; set; }
     [JsonPropertyName("lastModifiedBy")]
+    [StringLength(50)]
     public string? LastModifiedBy { get; set; }
     [JsonPropertyName("lastModified")]
     public DateTime? LastModified { get; set; }
@@ -56,7 +61,8 @@ public class UserDTO
     }
 
     /// <summary>
-    /// Copies the DTO values onto an existing entity. PasswordHash is never exposed by the DTO, so it is left untouched.
+    /// Copies only the editable values of the DTO onto an existing (tracked) entity.
+    /// Fields that are not editable (audit dates, PasswordHash, ...) are left untouched.
     /// </summary>
     public static void CopyTo(UserDTO dto, User entity)
     {
@@ -64,9 +70,7 @@ public class UserDTO
         entity.Email = dto.Email;
         entity.IsActive = dto.IsActive;
         entity.RoleId = dto.RoleId;
-        entity.CreatedAt = dto.CreatedAt;
         entity.ModifiedBy = dto.ModifiedBy;
         entity.LastModifiedBy = dto.LastModifiedBy;
-        entity.LastModified = dto.LastModified;
     }
 }
