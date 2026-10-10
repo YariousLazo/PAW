@@ -1,0 +1,59 @@
+@model PAW.Web.Models.ProductDetailsViewModel
+
+<div class="modal-header">
+    <h5 class="modal-title">Product Details</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+
+    <partial name="_DetailsBody" model="Model.Product" />
+
+    <!-- Category associated to the product (reuses the Category details partial) -->
+    <div class="card mt-3">
+        <div class="card-header fw-bold">Category</div>
+        <div class="card-body">
+            @if (Model.Category != null)
+            {
+                <partial name="~/Views/Category/_DetailsBody.cshtml" model="Model.Category" />
+            }
+            else
+            {
+                <span class="text-muted">No category assigned.</span>
+            }
+        </div>
+    </div>
+
+    <!-- Inventory associated to the product (reuses the Inventory details partial) -->
+    <div class="card mt-3">
+        <div class="card-header fw-bold">Inventory</div>
+        <div class="card-body">
+            @if (Model.Inventory != null)
+            {
+                <partial name="~/Views/Inventory/_DetailsBody.cshtml" model="Model.Inventory" />
+            }
+            else
+            {
+                <span class="text-muted">No inventory assigned.</span>
+            }
+        </div>
+    </div>
+
+    <!-- Supplier associated to the product (reuses the Supplier details partial) -->
+    <div class="card mt-3">
+        <div class="card-header fw-bold">Supplier</div>
+        <div class="card-body">
+            @if (Model.Supplier != null)
+            {
+                <partial name="~/Views/Supplier/_DetailsBody.cshtml" model="Model.Supplier" />
+            }
+            else
+            {
+                <span class="text-muted">No supplier assigned.</span>
+            }
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>
