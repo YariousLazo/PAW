@@ -28,14 +28,17 @@ namespace PAW.API.Controllers
         {
             if (dto.UserId > 0)
             {
-                // Update the tracked entity so the stored PasswordHash is not overwritten.
                 var existing = await userRepository.FindAsync(dto.UserId);
                 if (existing is null) return NotFound();
                 UserDTO.CopyTo(dto, existing);
+                existing.LastModified = DateTime.Now;
                 return await userRepository.UpdateAsync(existing);
             }
 
-            return await userRepository.CreateAsync(UserDTO.ConvertTo(dto));
+            var entity = UserDTO.ConvertTo(dto);
+            entity.CreatedAt = DateTime.Now;
+            entity.LastModified = DateTime.Now;
+            return await userRepository.CreateAsync(entity);
         }
 
         [HttpDelete("{id:int}")]

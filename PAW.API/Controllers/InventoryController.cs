@@ -26,8 +26,19 @@ namespace PAW.API.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> Save([FromBody] InventoryDTO dto)
         {
+            if (dto.InventoryId > 0)
+            {
+                var existing = await inventoryRepository.FindAsync(dto.InventoryId);
+                if (existing is null) return NotFound();
+                InventoryDTO.CopyTo(dto, existing);
+                existing.LastUpdated = DateTime.Now;
+                return await inventoryRepository.UpdateAsync(existing);
+            }
+
             var entity = InventoryDTO.ConvertTo(dto);
-            return await inventoryRepository.UpsertAsync(entity, dto.InventoryId > 0);
+            entity.DateAdded = DateTime.Now;
+            entity.LastUpdated = DateTime.Now;
+            return await inventoryRepository.CreateAsync(entity);
         }
 
         [HttpDelete("{id:int}")]

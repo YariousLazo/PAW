@@ -26,8 +26,17 @@ namespace PAW.API.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> Save([FromBody] NotificationDTO dto)
         {
+            if (dto.Id > 0)
+            {
+                var existing = await notificationRepository.FindAsync(dto.Id);
+                if (existing is null) return NotFound();
+                NotificationDTO.CopyTo(dto, existing);
+                return await notificationRepository.UpdateAsync(existing);
+            }
+
             var entity = NotificationDTO.ConvertTo(dto);
-            return await notificationRepository.UpsertAsync(entity, dto.Id > 0);
+            entity.CreatedAt = DateTime.Now;
+            return await notificationRepository.CreateAsync(entity);
         }
 
         [HttpDelete("{id:int}")]

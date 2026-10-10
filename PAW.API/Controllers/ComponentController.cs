@@ -27,8 +27,16 @@ namespace PAW.API.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> Save([FromBody] ComponentDTO dto)
         {
+            if (dto.Id > 0)
+            {
+                var existing = (await componentRepository.ReadAsync()).FirstOrDefault(x => x.Id == dto.Id);
+                if (existing is null) return NotFound();
+                ComponentDTO.CopyTo(dto, existing);
+                return await componentRepository.UpdateAsync(existing);
+            }
+
             var entity = ComponentDTO.ConvertTo(dto);
-            return await componentRepository.UpsertAsync(entity, dto.Id > 0);
+            return await componentRepository.CreateAsync(entity);
         }
 
         [HttpDelete("{id:int}")]

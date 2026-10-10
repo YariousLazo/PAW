@@ -26,8 +26,16 @@ namespace PAW.API.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> Save([FromBody] RoleDTO dto)
         {
+            if (dto.RoleId > 0)
+            {
+                var existing = await roleRepository.FindAsync(dto.RoleId);
+                if (existing is null) return NotFound();
+                RoleDTO.CopyTo(dto, existing);
+                return await roleRepository.UpdateAsync(existing);
+            }
+
             var entity = RoleDTO.ConvertTo(dto);
-            return await roleRepository.UpsertAsync(entity, dto.RoleId > 0);
+            return await roleRepository.CreateAsync(entity);
         }
 
         [HttpDelete("{id:int}")]
