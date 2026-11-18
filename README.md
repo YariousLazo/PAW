@@ -50,3 +50,10 @@ Notification, Role, Supplier, PawTask (entidad `Task`), User, UserAction y UserR
 - `PAW.Web`: `TaskApiService` (consume el Minimal API, URL en `MinimalApi:BaseUrl` de `appsettings.json`), `TasksController` y `Views/Tasks` (mismo flujo de modales, `_DeleteConfirm` y paginación del resto de entidades).
 - `_Layout.cshtml`: nuevo menú "Tasks (Minimal API)". El menú "Entities > Task" sigue usando `PAW.API` y la base de datos.
 - `PAW.sln` y `PAW.slnLaunch.user`: se agregó `PAW.MinimalAPI` (iniciar Web, API y MinimalAPI a la vez).
+
+### 5. Controllers de Web completados
+
+- Los controllers de `PAW.Web` (Category, Component, Inventory, Notification, PawTask, Product, Role, Supplier, User, UserAction y UserRole) solo tenian `Index` y devolvian una lista; las vistas ya esperaban `PagedList<T>`.
+- Ahora cada uno tiene `Index(page)` paginado y las acciones `Details`, `Create`, `Edit`, `Save` y `Delete` (GET de confirmacion + POST), que devuelven los partials que carga el modal (`site.js`).
+- `Product`: `Details` agrega Category, Inventory y Supplier (`ProductDetailsViewModel`); `Create` y `Edit` llenan los dropdowns (`ViewBag.Categories`, `Suppliers`, `Inventories`).
+- `UserAction` y `UserRole`: el Id lo digita el usuario al agregar (`ViewData["IsNew"]`); se avisa si el Id ya existe.
