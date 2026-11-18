@@ -20,3 +20,105 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+/* ==========================================================================
+   Floating exchange-rate widget (Views/Shared/ExchangeRate.cshtml)
+   ========================================================================== */
+.fx-widget {
+  position: fixed;
+  top: 72px;
+  right: 16px;
+  z-index: 1040;
+  width: 235px;
+  color: #fff;
+  background: linear-gradient(145deg, #0f2027 0%, #203a43 55%, #2c5364 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  font-size: 0.85rem;
+  overflow: hidden;
+}
+
+.fx-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.fx-title {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.fx-actions { display: flex; gap: 0.25rem; }
+
+.fx-btn {
+  width: 24px;
+  height: 24px;
+  line-height: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+}
+.fx-btn:hover { background: rgba(255, 255, 255, 0.25); }
+
+.fx-body { padding: 0.6rem 0.75rem 0.7rem; }
+
+.fx-block + .fx-block {
+  margin-top: 0.55rem;
+  padding-top: 0.55rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.fx-currency {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.fx-badge {
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #0f2027;
+}
+.fx-usd { background: #7ee0a1; }
+.fx-eur { background: #ffd166; }
+
+.fx-date { font-size: 0.68rem; opacity: 0.7; }
+
+.fx-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.fx-row span { opacity: 0.8; }
+.fx-row strong { font-size: 0.95rem; }
+
+.fx-status {
+  margin-top: 0.55rem;
+  font-size: 0.68rem;
+  text-align: right;
+  opacity: 0.65;
+}
+
+.fx-widget.is-loading .fx-row strong { opacity: 0.5; }
+.fx-widget.is-stale .fx-status { color: #ffd166; opacity: 1; }
+.fx-widget.is-error .fx-status { color: #ff8f8f; opacity: 1; }
+
+.fx-widget.is-collapsed { width: auto; }
+.fx-widget.is-collapsed .fx-body { display: none; }
+
+@media (max-width: 575.98px) {
+  .fx-widget { top: auto; bottom: 12px; right: 12px; width: 200px; }
+}
