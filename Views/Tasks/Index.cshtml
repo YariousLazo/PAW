@@ -1,0 +1,147 @@
+@model PAW.Web.Models.PagedList<PAW.Models.DTO.PawTaskDTO>
+@{
+    ViewData["Title"] = "Tasks (Minimal API)";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Tasks <small class="text-muted fs-6">(Minimal API)</small></h2>
+
+        <a asp-action="Create" data-modal class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>
+            Add Task
+        </a>
+    </div>
+
+    @if (ViewData["ErrorMessage"] is string errorMessage)
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Task ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Due Date</th>
+                            <th>Created Date</th>
+                            <th>Modified By</th>
+                            <th>Modified Date</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @item.Id
+                                    </td>
+
+                                    <td>
+                                        <strong>@item.Name</strong>
+                                    </td>
+
+                                    <td>
+                                        @item.Description
+                                    </td>
+
+                                    <td>
+                                        @{
+                                            var badge = item.Status switch
+                                            {
+                                                "Completed" => "bg-success",
+                                                "In Progress" => "bg-primary",
+                                                "Pending" => "bg-secondary",
+                                                _ => "bg-dark"
+                                            };
+                                        }
+                                        <span class="badge @badge">@item.Status</span>
+                                    </td>
+
+                                    <td>
+                                        @(item.DueDate?.ToString("yyyy-MM-dd HH:mm"))
+                                    </td>
+
+                                    <td>
+                                        @(item.CreatedAt?.ToString("yyyy-MM-dd HH:mm"))
+                                    </td>
+
+                                    <td>
+                                        @item.ModifiedBy
+                                    </td>
+
+                                    <td>
+                                        @(item.LastModified?.ToString("yyyy-MM-dd HH:mm"))
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <div class="btn-group" role="group">
+
+                                            <!-- Edit -->
+                                            <a asp-action="Edit"
+                                               asp-route-id="@item.Id"
+                                               data-modal
+                                               class="btn btn-sm btn-warning">
+                                                Edit
+                                            </a>
+
+                                            <!-- Details -->
+                                            <a asp-action="Details"
+                                               asp-route-id="@item.Id"
+                                               data-modal
+                                               class="btn btn-sm btn-info">
+                                                Details
+                                            </a>
+
+                                            <!-- Delete -->
+                                            <a asp-action="Delete"
+                                               asp-route-id="@item.Id"
+                                               data-modal
+                                               class="btn btn-sm btn-danger">
+                                                Delete
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    No tasks found.
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <partial name="_Pagination" model="Model" />
+
+        </div>
+    </div>
+
+</div>

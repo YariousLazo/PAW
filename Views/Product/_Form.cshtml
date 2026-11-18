@@ -1,0 +1,83 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model PAW.Models.DTO.ProductDTO
+@{
+    var isEdit = Model.ProductId > 0;
+}
+
+<form asp-action="Save" method="post" data-modal-form>
+    <div class="modal-header">
+        <h5 class="modal-title">@(isEdit ? "Edit" : "Add") Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <input type="hidden" asp-for="ProductId" />
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Name</label>
+            <input asp-for="Name" class="form-control" maxlength="255" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <textarea asp-for="Description" class="form-control" rows="3" maxlength="1000"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Rating" class="form-label">Rating</label>
+            <select asp-for="Rating" class="form-select">
+                @for (int i = 0; i <= 5; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+            <span asp-validation-for="Rating" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label">Category</label>
+            <select asp-for="CategoryId" class="form-select" asp-items="@((IEnumerable<SelectListItem>)ViewBag.Categories)">
+                <option value="">-- None --</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="SupplierId" class="form-label">Supplier</label>
+            <select asp-for="SupplierId" class="form-select" asp-items="@((IEnumerable<SelectListItem>)ViewBag.Suppliers)">
+                <option value="">-- None --</option>
+            </select>
+            <span asp-validation-for="SupplierId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="InventoryId" class="form-label">Inventory</label>
+            <select asp-for="InventoryId" class="form-select" asp-items="@((IEnumerable<SelectListItem>)ViewBag.Inventories)">
+                <option value="">-- None --</option>
+            </select>
+            <span asp-validation-for="InventoryId" class="text-danger"></span>
+        </div>
+
+        @if (!isEdit)
+        {
+            <div class="mb-3">
+                <label asp-for="CreatedBy" class="form-label">Created By</label>
+                <input asp-for="CreatedBy" class="form-control" maxlength="100" />
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+        }
+
+        <div class="mb-3">
+            <label asp-for="ModifiedBy" class="form-label">Modified By</label>
+            <input asp-for="ModifiedBy" class="form-control" maxlength="255" />
+            <span asp-validation-for="ModifiedBy" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>

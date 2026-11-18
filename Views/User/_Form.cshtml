@@ -1,0 +1,59 @@
+@model PAW.Models.DTO.UserDTO
+@{
+    var isEdit = Model.UserId > 0;
+}
+
+<form asp-action="Save" method="post" data-modal-form>
+    <div class="modal-header">
+        <h5 class="modal-title">@(isEdit ? "Edit" : "Add") User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <input type="hidden" asp-for="UserId" />
+
+        <div class="mb-3">
+            <label asp-for="Username" class="form-label">Username</label>
+            <input asp-for="Username" class="form-control" maxlength="255" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" maxlength="255" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="IsActive" class="form-label">Active</label>
+            <select name="IsActive" id="IsActive" class="form-select">
+            <option value="true" selected="@(Model.IsActive == true)">Yes</option>
+            <option value="false" selected="@(Model.IsActive != true)">No</option>
+        </select>
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="RoleId" class="form-label">Role ID</label>
+            <input asp-for="RoleId" type="number" step="1" class="form-control" />
+            <span asp-validation-for="RoleId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ModifiedBy" class="form-label">Modified By</label>
+            <input asp-for="ModifiedBy" class="form-control" maxlength="255" />
+            <span asp-validation-for="ModifiedBy" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="LastModifiedBy" class="form-label">Last Modified By</label>
+            <input asp-for="LastModifiedBy" class="form-control" maxlength="50" />
+            <span asp-validation-for="LastModifiedBy" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>
