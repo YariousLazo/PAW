@@ -1,0 +1,37 @@
+@PAW.MinimalAPI_HostAddress = http://localhost:5200
+
+GET {{PAW.MinimalAPI_HostAddress}}/tasks
+Accept: application/json
+
+###
+
+GET {{PAW.MinimalAPI_HostAddress}}/tasks/1
+Accept: application/json
+
+###
+
+POST {{PAW.MinimalAPI_HostAddress}}/tasks
+Content-Type: application/json
+
+{
+  "name": "New task",
+  "description": "Created from the .http file",
+  "status": "Pending",
+  "dueDate": "2026-12-01T00:00:00"
+}
+
+###
+
+PUT {{PAW.MinimalAPI_HostAddress}}/tasks/1
+Content-Type: application/json
+
+{
+  "name": "Design the database (updated)",
+  "description": "Updated from the .http file",
+  "status": "Completed",
+  "dueDate": "2026-12-01T00:00:00"
+}
+
+###
+
+DELETE {{PAW.MinimalAPI_HostAddress}}/tasks/1
