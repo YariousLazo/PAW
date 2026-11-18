@@ -35,3 +35,18 @@ Notification, Role, Supplier, PawTask (entidad `Task`), User, UserAction y UserR
 - `UserAction` y `UserRole`: `Id` pasó a `decimal` no nulo y `ProductDbContext` usa `HasKey(e => e.Id)` en lugar de `HasNoKey()`.
 - `PAW.Web/Program.cs`: cultura invariante para decimales y fechas.
 - `ServiceBase`: helper `IsNotFound`.
+
+# PAW (Tarea 2 y 3) 17 Noviembre
+### 3. Tipo de cambio por JavaScript (ExchangeRate)
+
+- `wwwroot/js/site.js`: `getExchangeRate()` consulta `https://api.hacienda.go.cr/indicadores/tc` desde el navegador y **cachea** el resultado en `localStorage` (1 hora). Si la API falla usa el último valor guardado.
+- `Views/Shared/ExchangeRate.cshtml`: tarjeta flotante arriba a la derecha (sin modelo, se llena desde JS). Se incluye una sola vez en `_Layout.cshtml`, por lo que aparece en todas las pantallas.
+- Estilos en `wwwroot/css/site.css` (`.fx-widget`).
+
+### 4. PAW.MinimalAPI y pantalla de Tasks
+
+- Nuevo proyecto `PAW.MinimalAPI` (Minimal API, https://localhost:7200) con el modelo `Task`: `GET /tasks`, `GET /tasks/{id}`, `GET /tasks/completed`, `POST /tasks`, `PUT /tasks/{id}`, `DELETE /tasks/{id}`.
+- Dependency Injection: los endpoints reciben `ITaskRepository` (registrado en `Program.cs` como `InMemoryTaskRepository`). No usa el DbContext de Entity Framework.
+- `PAW.Web`: `TaskApiService` (consume el Minimal API, URL en `MinimalApi:BaseUrl` de `appsettings.json`), `TasksController` y `Views/Tasks` (mismo flujo de modales, `_DeleteConfirm` y paginación del resto de entidades).
+- `_Layout.cshtml`: nuevo menú "Tasks (Minimal API)". El menú "Entities > Task" sigue usando `PAW.API` y la base de datos.
+- `PAW.sln` y `PAW.slnLaunch.user`: se agregó `PAW.MinimalAPI` (iniciar Web, API y MinimalAPI a la vez).
